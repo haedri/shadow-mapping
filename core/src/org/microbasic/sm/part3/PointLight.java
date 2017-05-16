@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.glutils.FrameBufferCubemap;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import org.microbasic.sm.tools.FrameBufferCubeMap;
@@ -14,8 +15,8 @@ import org.microbasic.sm.tools.ScreenshotFactory;
 public class PointLight extends Light
 {
 
-	public FrameBufferCubeMap	frameBuffer;
-	public Cubemap				depthMap;
+	public FrameBufferCubeMap frameBuffer;
+	public Cubemap            depthMap;
 
 	public PointLight(final MainScreen mainScreen, final Vector3 position)
 	{
@@ -56,7 +57,7 @@ public class PointLight extends Light
 
 		if (frameBuffer == null)
 		{
-			frameBuffer = new FrameBufferCubeMap(Format.Alpha, MainScreen.DEPTHMAPSIZE, true);
+			frameBuffer = new FrameBufferCubeMap(Format.Alpha, MainScreen.DEPTHMAPSIZE, MainScreen.DEPTHMAPSIZE, true);
 		}
 
 		shaderProgram.begin();
@@ -67,7 +68,8 @@ public class PointLight extends Light
 		for (int s = 0; s <= 5; s++)
 		{
 			final Cubemap.CubemapSide side = Cubemap.CubemapSide.values()[s];
-			frameBuffer.begin(side, camera);
+			frameBuffer.begin();
+			frameBuffer.bindSide(side, camera);
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 

@@ -47,7 +47,7 @@ public class DirectionalLight extends Light
 		camera.near = 1f;
 		camera.far = 70;
 		camera.position.set(position);
-		camera.direction.set(direction);
+		camera.lookAt(direction);
 		camera.update();
 	}
 

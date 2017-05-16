@@ -21,40 +21,39 @@ import org.microbasic.sm.tools.SimpleTextureShader;
 
 /**
  * Main screen
- * 
+ *
  * @author jb
- * 
  */
 public class MainScreen implements Screen
 {
-
-	private ShaderProgram					shaderProgram;
-	private ModelBatch						modelBatch;
-	private ModelInstance					modelInstance;
-	private PerspectiveCamera				camera;
-	private IntFirstPersonCameraController	firstPersonCameraController;
-
-	private long							lastFpsDisplayed	= System.currentTimeMillis();
-	private long							lastScreenShot		= 0;
-	public boolean							takeScreenshots		= false;
-
-	public static final int					DEPTHMAPSIZE		= 1024;
-	public Light							currentLight;
-
+	
+	private ShaderProgram                  shaderProgram;
+	private ModelBatch                     modelBatch;
+	private ModelInstance                  modelInstance;
+	private PerspectiveCamera              camera;
+	private IntFirstPersonCameraController firstPersonCameraController;
+	
+	private long    lastFpsDisplayed = System.currentTimeMillis();
+	private long    lastScreenShot   = 0;
+	public  boolean takeScreenshots  = false;
+	
+	public static final int DEPTHMAPSIZE = 1024;
+	public Light currentLight;
+	
 	public MainScreen()
 	{
 		init();
 	}
-
+	
 	@Override
 	public void show()
 	{
 	}
-
+	
 	/**
 	 * Initialize a shader, vertex shader must be named prefix_v.glsl, fragment shader must be named
 	 * prefix_f.glsl
-	 * 
+	 *
 	 * @param prefix
 	 * @return
 	 */
@@ -62,9 +61,9 @@ public class MainScreen implements Screen
 	{
 		ShaderProgram.pedantic = false;
 		final String packageName = getClass().getPackage().getName().substring(1 + getClass().getPackage().getName().lastIndexOf("."));
-
+		
 		final ShaderProgram shaderProgram = new ShaderProgram(Gdx.files.internal("shaders/" + packageName + "/" + prefix + "_v.glsl"), Gdx.files.internal("shaders/" + packageName + "/" + prefix
-				+ "_f.glsl"));
+						+ "_f.glsl"));
 		if (!shaderProgram.isCompiled())
 		{
 			System.err.println("Error with shader " + prefix + ": " + shaderProgram.getLog());
@@ -76,7 +75,7 @@ public class MainScreen implements Screen
 		}
 		return shaderProgram;
 	}
-
+	
 	/**
 	 * Called on start
 	 */
@@ -84,17 +83,17 @@ public class MainScreen implements Screen
 	{
 		initCameras();
 		initShaders();
-
+		
 		// Load the scene, it is just one big model
 		final G3dModelLoader loader = new G3dModelLoader(new UBJsonReader());
 		final Model model = loader.loadModel(Gdx.files.internal("models/scene_f0.g3db"));
 		modelInstance = new ModelInstance(model);
 		modelInstance.transform.setToScaling(4f, 4f, 4f);
-
+		
 		//currentLight = new DirectionalLight(this, new Vector3(33, 10, 3), new Vector3(-10, 0, 0));
 		currentLight = new PointLight(this, new Vector3(-25.5f, 12.0f, -26f));
 	}
-
+	
 	/**
 	 * Load camera(s)
 	 */
@@ -107,12 +106,12 @@ public class MainScreen implements Screen
 		camera.position.set(-31, 11, 27);
 		camera.lookAt(0, 11, 0);
 		camera.update();
-
+		
 		firstPersonCameraController = new IntFirstPersonCameraController(camera);
 		firstPersonCameraController.setVelocity(30);
 		Gdx.input.setInputProcessor(firstPersonCameraController);
 	}
-
+	
 	/**
 	 * Load shader(s)
 	 */
@@ -128,7 +127,7 @@ public class MainScreen implements Screen
 			}
 		});
 	}
-
+	
 	/**
 	 * Render the main scene, final render
 	 */
@@ -144,9 +143,9 @@ public class MainScreen implements Screen
 		{
 			ScreenshotFactory.saveScreenshot(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), "scene");
 		}
-
+		
 	}
-
+	
 	/**
 	 * Render a frame
 	 */
@@ -157,10 +156,10 @@ public class MainScreen implements Screen
 		currentLight.render(modelInstance);
 		renderScene();
 	}
-
+	
 	/**
 	 * Everything that is not directly drawing but needs to be computed each frame
-	 * 
+	 *
 	 * @param delta
 	 */
 	public void act(final float delta)
@@ -181,7 +180,7 @@ public class MainScreen implements Screen
 			Gdx.app.log("act", "FPS: " + Gdx.graphics.getFramesPerSecond());
 		}
 	}
-
+	
 	/**
 	 * Window resized
 	 */
@@ -192,29 +191,29 @@ public class MainScreen implements Screen
 		camera.viewportWidth = width;
 		camera.update();
 	}
-
+	
 	@Override
 	public void pause()
 	{
-
+	
 	}
-
+	
 	@Override
 	public void resume()
 	{
-
+	
 	}
-
+	
 	@Override
 	public void hide()
 	{
-
+	
 	}
-
+	
 	@Override
 	public void dispose()
 	{
-
+	
 	}
-
+	
 }
